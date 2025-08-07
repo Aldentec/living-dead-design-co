@@ -6,15 +6,8 @@ import Custom from './pages/Custom';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
 import Cart from './pages/Cart';
-import Account from './pages/Account';
-import Signup from './pages/Auth/Signup';
-import Login from './pages/Auth/Login';
-import ConfirmSignup from './pages/Auth/ConfirmSignup';
-import ForgotPassword from './pages/Auth/ForgotPassword';
-
-
-import AdminHome from './pages/Admin/AdminHome';
-import ProtectedAdminRoute from './components/Admin/ProtectedAdminRoute';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 
 import './styles/global.css';
 import 'yet-another-react-lightbox/styles.css';
@@ -31,20 +24,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/account" element={<Account />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/confirm" element={<ConfirmSignup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          <Route
-            path="/admin"
-            element={
-              <ProtectedAdminRoute>
-                <AdminHome />
-              </ProtectedAdminRoute>
-            }
-          />
         </Routes>
       </div>
     </Router>

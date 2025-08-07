@@ -10,11 +10,6 @@ import Account from './pages/Account';
 import Signup from './pages/Auth/Signup';
 import Login from './pages/Auth/Login';
 import ConfirmSignup from './pages/Auth/ConfirmSignup';
-import ForgotPassword from './pages/Auth/ForgotPassword';
-
-
-import AdminHome from './pages/Admin/AdminHome';
-import ProtectedAdminRoute from './components/Admin/ProtectedAdminRoute';
 
 import './styles/global.css';
 import 'yet-another-react-lightbox/styles.css';
@@ -35,16 +30,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/confirm" element={<ConfirmSignup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-
-          <Route
-            path="/admin"
-            element={
-              <ProtectedAdminRoute>
-                <AdminHome />
-              </ProtectedAdminRoute>
-            }
-          />
         </Routes>
       </div>
     </Router>

@@ -13,8 +13,8 @@ import ConfirmSignup from './pages/Auth/ConfirmSignup';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 
 
-import AdminHome from './pages/Admin/AdminHome';
-import ProtectedAdminRoute from './components/Admin/ProtectedAdminRoute';
+import AdminHome from './pages/AdminHome';
+import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 
 import './styles/global.css';
 import 'yet-another-react-lightbox/styles.css';
