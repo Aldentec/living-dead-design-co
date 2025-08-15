@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div
       className="text-light d-flex align-items-center"
-      style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}
+      style={{ backgroundColor: '#000', minHeight: '100vh' }}
     >
       <Container className="text-center">
         <Row className="justify-content-center mb-4">

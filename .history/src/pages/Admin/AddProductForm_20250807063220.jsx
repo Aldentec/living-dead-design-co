@@ -12,25 +12,35 @@ export default function AddProductForm() {
     weight: '',
     tags: '',
     variants: `[
-      {
-        "options": {
-          "Color": "Black",
-          "Style": "T-Shirt",
-          "Size": "M"
+        {
+          "options": {
+            "Color": "Black",
+            "Style": "T-Shirt",
+            "Size": "M"
+          },
+          "price": 20.00,
+          "quantity": 10
         },
-        "price": 20,
-        "quantity": 10
-      },
-      {
-        "options": {
-          "Color": "Black",
-          "Style": "Hoodie",
-          "Size": "L"
+        {
+          "options": {
+            "Color": "Black",
+            "Style": "Hoodie",
+            "Size": "L"
+          },
+          "price": 35.00,
+          "quantity": 5
         },
-        "price": 35,
-        "quantity": 5
-      }
-    ]`,
+        {
+          "options": {
+            "Color": "White",
+            "Style": "Long Sleeve",
+            "Size": "S"
+          },
+          "price": 25.00,
+          "quantity": 2
+        }
+      ]
+`,
     image: null,
   });
   const [loading, setLoading] = useState(false);

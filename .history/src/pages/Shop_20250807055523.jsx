@@ -146,14 +146,14 @@ export default function Shop() {
   }
 
   return (
-    <div className="text-light pb-5" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
+    <div className="bg-dark text-light pb-5" style={{ minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
       <Container style={{ paddingTop: '3rem' }}>
         {/* Header */}
         <div className="text-center mb-5">
           <h1 className="display-4 fw-bold mb-3 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             Shop
           </h1>
-          <p className="lead" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
+          <p className="lead text-muted" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
         </div>
 
         {/* Tag Filter */}
@@ -290,11 +290,7 @@ export default function Shop() {
       </Container>
 
       {/* Toast Notifications */}
-      <ToastContainer 
-        position="top-center" 
-        className="p-3"
-        style={{ zIndex: 9999, marginTop: '80px' }}
-      >
+      <ToastContainer position="bottom-end" className="p-3">
         <Toast 
           show={showToast} 
           onClose={() => setShowToast(false)} 

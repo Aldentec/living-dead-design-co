@@ -24,8 +24,8 @@ export default function Cart() {
 
   if (cart.items.length === 0) {
     return (
-      <div className="bg-dark text-light" style={{ minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
-        <Container style={{ paddingTop: '1rem' }}>
+      <div className="bg-dark text-light" style={{ minHeight: '100vh', paddingTop: '2rem' }}>
+        <Container className="py-5">
           <div className="text-center py-5">
             <h1 className="display-4 mb-4 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
               Your Cart
@@ -47,8 +47,8 @@ export default function Cart() {
   }
 
   return (
-    <div className="bg-dark text-light" style={{ minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
-      <Container style={{ paddingTop: '1rem', paddingBottom: '2rem' }}>
+    <div className="bg-dark text-light" style={{ minHeight: '100vh', paddingTop: '2rem' }}>
+      <Container className="py-4">
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="display-5 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Spinner, Alert, Button, Form, Badge, Toast, ToastContainer } from 'react-bootstrap';
-import ProductCard from './Shop/ProductCard';
-import { useCart } from '../context/CartContext';
+import { Container, Row, Col, Spinner, Alert, Button, Form } from 'react-bootstrap';
+import ProductCard from '../components/ProductCard';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -9,12 +8,7 @@ export default function Shop() {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTags, setSelectedTags] = useState([]);
   const [sortBy, setSortBy] = useState('newest');
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  
-  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchProducts();
@@ -59,28 +53,6 @@ export default function Shop() {
 
   // Get unique categories from products
   const categories = ['all', ...new Set(products.flatMap(product => product.categories || []))];
-  
-  // Get unique tags from products
-  const allTags = [...new Set(products.flatMap(product => product.tags || []))];
-
-  // Handle tag selection
-  const toggleTag = (tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-  };
-
-  const clearAllTags = () => {
-    setSelectedTags([]);
-  };
-
-  const clearAllFilters = () => {
-    setSelectedTags([]);
-    setSelectedCategory('all');
-    setSearchTerm('');
-  };
 
   // Filter and sort products
   const filteredProducts = products
@@ -92,12 +64,7 @@ export default function Shop() {
       const matchesCategory = selectedCategory === 'all' || 
                              (product.categories && product.categories.includes(selectedCategory));
       
-      const matchesTags = selectedTags.length === 0 || 
-                         (product.tags && selectedTags.some(selectedTag => 
-                           product.tags.some(productTag => productTag.toLowerCase() === selectedTag.toLowerCase())
-                         ));
-      
-      return matchesSearch && matchesCategory && matchesTags;
+      return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -113,14 +80,12 @@ export default function Shop() {
       }
     });
 
-  const handleAddToCart = (product, variant = null, quantity = 1) => {
-    // Add item to cart
-    addToCart(product, variant, quantity);
-    
-    // Show success toast
-    const variantText = variant ? ` (${variant.option}: ${variant.value})` : '';
-    setToastMessage(`${product.title}${variantText} added to cart!`);
-    setShowToast(true);
+  const handleAddToCart = (product) => {
+    // TODO: Implement cart functionality
+    // For now, just show an alert or console log
+    console.log('Adding to cart:', product.title);
+    // You could show a toast notification here
+    alert(`${product.title} added to cart!`);
   };
 
   if (loading) {
@@ -146,53 +111,15 @@ export default function Shop() {
   }
 
   return (
-    <div className="text-light pb-5" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
-      <Container style={{ paddingTop: '3rem' }}>
+    <div className="bg-dark text-light py-5" style={{ minHeight: '100vh' }}>
+      <Container>
         {/* Header */}
         <div className="text-center mb-5">
           <h1 className="display-4 fw-bold mb-3 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             Shop
           </h1>
-          <p className="lead" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
+          <p className="lead text-muted" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
         </div>
-
-        {/* Tag Filter */}
-        {allTags.length > 0 && (
-          <div className="mb-4 tag-filter-section">
-            <div className="d-flex align-items-center flex-wrap gap-2">
-              <span className="text-light me-3">Filter by tags:</span>
-              <Button
-                variant={selectedTags.length === 0 ? "light" : "outline-light"}
-                size="sm"
-                onClick={clearAllTags}
-                className="mb-2"
-              >
-                All Tags
-              </Button>
-              {allTags.map(tag => (
-                <Button
-                  key={tag}
-                  variant={selectedTags.includes(tag) ? "primary" : "outline-secondary"}
-                  size="sm"
-                  onClick={() => toggleTag(tag)}
-                  className="mb-2"
-                  style={{
-                    backgroundColor: selectedTags.includes(tag) ? '#0d6efd' : 'transparent',
-                    borderColor: selectedTags.includes(tag) ? '#0d6efd' : '#6c757d',
-                    color: selectedTags.includes(tag) ? '#fff' : '#adb5bd'
-                  }}
-                >
-                  {tag}
-                </Button>
-              ))}
-              {selectedTags.length > 0 && (
-                <small className="text-muted ms-2" style={{ color: '#6c757d' }}>
-                  ({selectedTags.length} tag{selectedTags.length > 1 ? 's' : ''} selected)
-                </small>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Filters and Search */}
         <Row className="mb-4">
@@ -236,28 +163,10 @@ export default function Shop() {
         </Row>
 
         {/* Results Count */}
-        <div className="mb-4 d-flex justify-content-between align-items-center">
+        <div className="mb-4">
           <small className="text-muted" style={{ color: '#adb5bd' }}>
             Showing {filteredProducts.length} of {products.length} products
-            {selectedTags.length > 0 && (
-              <span> • Filtered by tags: {selectedTags.join(', ')}</span>
-            )}
-            {selectedCategory !== 'all' && (
-              <span> • Category: {selectedCategory}</span>
-            )}
-            {searchTerm && (
-              <span> • Search: "{searchTerm}"</span>
-            )}
           </small>
-          {(selectedTags.length > 0 || selectedCategory !== 'all' || searchTerm) && (
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              onClick={clearAllFilters}
-            >
-              Clear All Filters
-            </Button>
-          )}
         </div>
 
         {/* Products Grid */}
@@ -288,28 +197,6 @@ export default function Shop() {
           </div>
         )}
       </Container>
-
-      {/* Toast Notifications */}
-      <ToastContainer 
-        position="top-center" 
-        className="p-3"
-        style={{ zIndex: 9999, marginTop: '80px' }}
-      >
-        <Toast 
-          show={showToast} 
-          onClose={() => setShowToast(false)} 
-          delay={3000} 
-          autohide
-          bg="success"
-        >
-          <Toast.Header>
-            <strong className="me-auto">✅ Added to Cart</strong>
-          </Toast.Header>
-          <Toast.Body className="text-white">
-            {toastMessage}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </div>
   );
 }

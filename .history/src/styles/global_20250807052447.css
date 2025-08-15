@@ -129,76 +129,7 @@ button:hover {
     text-align: center;
 }
 
-/*** SHOP ***/
-/* Shop Page Styles */
-
-/* Override site-wrapper padding for shop pages */
-.shop-page {
-  padding-top: 0 !important;
-}
-
-/* Product Detail Page Styles */
-.breadcrumb {
-  background-color: transparent;
-  padding: 0;
-}
-
-.breadcrumb-item a {
-  color: #adb5bd;
-  text-decoration: none;
-}
-
-.breadcrumb-item a:hover {
-  color: #f8f9fa;
-}
-
-.breadcrumb-item.active {
-  color: #6c757d;
-}
-
-.breadcrumb-item + .breadcrumb-item::before {
-  content: "›";
-  color: #6c757d;
-}
-
-/* Product image hover effect */
-.product-detail-image {
-  transition: transform 0.3s ease;
-}
-
-.product-detail-image:hover {
-  transform: scale(1.02);
-}
-
-/* Sticky product info */
-@media (min-width: 992px) {
-  .sticky-top {
-    position: sticky;
-    top: 100px;
-    z-index: 10;
-  }
-}
-
-/* Variant buttons */
-.variant-button {
-  transition: all 0.2s ease;
-}
-
-.variant-button:hover {
-  transform: translateY(-1px);
-}
-
-/* Stock warning animation */
-.alert-warning {
-  animation: pulse-warning 2s infinite;
-}
-
-@keyframes pulse-warning {
-  0% { opacity: 1; }
-  50% { opacity: 0.8; }
-  100% { opacity: 1; }
-}
-
+/* SHOP */
 .product-card {
   transition: all 0.3s ease;
   cursor: pointer;
@@ -219,79 +150,22 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Tag filter styling */
-.tag-filter-section {
-  background-color: rgba(108, 117, 125, 0.1);
-  border-radius: 8px;
-  padding: 1rem;
-  border: 1px solid #495057;
-}
-
-.tag-filter-section .btn {
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.tag-filter-section .btn:hover {
-  transform: translateY(-1px);
-}
-
-.tag-filter-section .btn-outline-secondary:hover {
-  background-color: #6c757d;
-  border-color: #6c757d;
-  color: #fff;
-}
-
-/* Ensure text visibility on dark backgrounds */
-.bg-dark, .bg-secondary {
-  color: #f8f9fa !important;
-}
-
-.text-light {
-  color: #f8f9fa !important;
-}
-
-.text-muted {
-  color: #6c757d !important;
-}
-
-.card-text {
-  color: #adb5bd !important;
-}
-
-.card-title {
-  color: #f8f9fa !important;
-}
-
 /* Search and filter form styling */
-.form-control {
-  background-color: #495057 !important;
-  border-color: #6c757d !important;
-  color: #f8f9fa !important;
-}
-
 .form-control:focus,
 .form-select:focus {
   border-color: #6c757d;
   box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
-  background-color: #495057 !important;
-  color: #f8f9fa !important;
+  background-color: #495057;
+  color: #f8f9fa;
 }
 
 .form-control::placeholder {
   color: #adb5bd !important;
 }
 
-.form-select {
-  background-color: #495057 !important;
-  border-color: #6c757d !important;
-  color: #f8f9fa !important;
-}
-
 .form-select option {
-  background-color: #495057 !important;
-  color: #f8f9fa !important;
+  background-color: #495057;
+  color: #f8f9fa;
 }
 
 /* Badge styling improvements */
@@ -304,32 +178,12 @@ button:hover {
 /* Price styling */
 .price {
   font-size: 1.1rem;
-  color: #f8f9fa !important;
 }
 
 /* Loading spinner customization */
 .spinner-border {
   width: 3rem;
   height: 3rem;
-}
-
-/* Ensure all small text is visible */
-small {
-  color: #6c757d !important;
-}
-
-/* Header text */
-.display-4 {
-  color: #f8f9fa !important;
-}
-
-.lead {
-  color: #6c757d !important;
-}
-
-/* Results count text */
-.mb-4 small {
-  color: #adb5bd !important;
 }
 
 /* Responsive adjustments */
@@ -340,14 +194,6 @@ small {
   
   .display-4 {
     font-size: 2.5rem;
-  }
-  
-  .tag-filter-section {
-    padding: 0.75rem;
-  }
-  
-  .tag-filter-section .btn {
-    font-size: 0.875rem;
   }
 }
 
@@ -393,6 +239,7 @@ small {
   filter: grayscale(50%) opacity(0.7);
 }
 
+
 /* ADMIN */
 
 .admin-title {
@@ -420,10 +267,4 @@ small {
 
 .admin-btn:hover {
   background: #d8d8d8;
-}
-
-/*** OVERRIDES ***/
-
-.fw-semibold {
-  color: white !important;
 }

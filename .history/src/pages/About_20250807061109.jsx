@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 
 export default function About() {
   return (
-    <div className="text-light" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', paddingTop: '2rem' }}>
+    <div className="bg-dark text-light" style={{ minHeight: '100vh', paddingTop: '2rem' }}>
       <Container className="py-5">
         {/* Header Section */}
         <div className="text-center mb-5">
           <h1 className="display-3 fw-bold text-light mb-3" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             About Living Dead Design Co.
           </h1>
-          <p className="lead" style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <p className="lead text-muted" style={{ maxWidth: '600px', margin: '0 auto' }}>
             Handcrafted apparel and art born from passion, creativity, and a love for unique design.
           </p>
         </div>

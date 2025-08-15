@@ -11,26 +11,18 @@ export default function AddProductForm() {
     quantity: '',
     weight: '',
     tags: '',
-    variants: `[
+    variants: JSON.stringify([
       {
-        "options": {
-          "Color": "Black",
-          "Style": "T-Shirt",
-          "Size": "M"
-        },
-        "price": 20,
-        "quantity": 10
+        options: { Color: "Black", Style: "T-Shirt", Size: "M" },
+        price: 20,
+        quantity: 10
       },
       {
-        "options": {
-          "Color": "Black",
-          "Style": "Hoodie",
-          "Size": "L"
-        },
-        "price": 35,
-        "quantity": 5
+        options: { Color: "Black", Style: "Hoodie", Size: "L" },
+        price: 35,
+        quantity: 5
       }
-    ]`,
+    ], null, 2),
     image: null,
   });
   const [loading, setLoading] = useState(false);

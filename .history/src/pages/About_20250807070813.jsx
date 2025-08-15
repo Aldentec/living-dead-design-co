@@ -11,7 +11,7 @@ export default function About() {
           <h1 className="display-3 fw-bold text-light mb-3" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             About Living Dead Design Co.
           </h1>
-          <p className="lead" style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <p className="lead text-muted" style={{ maxWidth: '600px', margin: '0 auto' }}>
             Handcrafted apparel and art born from passion, creativity, and a love for unique design.
           </p>
         </div>

@@ -3,10 +3,7 @@ import heroImage from '../assets/skeletons-dancing-hero.png';
 
 export default function Home() {
   return (
-    <div
-      className="text-light d-flex align-items-center"
-      style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}
-    >
+    <div className="bg-dark text-light py-5">
       <Container className="text-center">
         <Row className="justify-content-center mb-4">
           <Col md={8}>
@@ -28,5 +25,6 @@ export default function Home() {
         </Row>
       </Container>
     </div>
+
   );
 }

@@ -153,7 +153,7 @@ export default function Shop() {
           <h1 className="display-4 fw-bold mb-3 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             Shop
           </h1>
-          <p className="lead" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
+          <p className="lead text-muted" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
         </div>
 
         {/* Tag Filter */}

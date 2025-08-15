@@ -4,8 +4,8 @@ import heroImage from '../assets/skeletons-dancing-hero.png';
 export default function Home() {
   return (
     <div
-      className="text-light d-flex align-items-center"
-      style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}
+      className="bg-dark text-light d-flex align-items-center"
+      style={{ minHeight: '100vh' }}
     >
       <Container className="text-center">
         <Row className="justify-content-center mb-4">

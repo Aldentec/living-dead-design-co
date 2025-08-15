@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Spinner, Alert, Button, Form, Badge, Toast, ToastContainer } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Alert, Button, Form, Badge } from 'react-bootstrap';
 import ProductCard from './Shop/ProductCard';
-import { useCart } from '../context/CartContext';
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
@@ -11,10 +10,6 @@ export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortBy, setSortBy] = useState('newest');
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  
-  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchProducts();
@@ -113,14 +108,12 @@ export default function Shop() {
       }
     });
 
-  const handleAddToCart = (product, variant = null, quantity = 1) => {
-    // Add item to cart
-    addToCart(product, variant, quantity);
-    
-    // Show success toast
-    const variantText = variant ? ` (${variant.option}: ${variant.value})` : '';
-    setToastMessage(`${product.title}${variantText} added to cart!`);
-    setShowToast(true);
+  const handleAddToCart = (product) => {
+    // TODO: Implement cart functionality
+    // For now, just show an alert or console log
+    console.log('Adding to cart:', product.title);
+    // You could show a toast notification here
+    alert(`${product.title} added to cart!`);
   };
 
   if (loading) {
@@ -146,14 +139,14 @@ export default function Shop() {
   }
 
   return (
-    <div className="text-light pb-5" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh', marginTop: '-4.5rem', paddingTop: '4.5rem' }}>
-      <Container style={{ paddingTop: '3rem' }}>
+    <div className="bg-dark text-light pb-5" style={{ minHeight: '100vh' }}>
+      <Container className="pt-5">
         {/* Header */}
         <div className="text-center mb-5">
           <h1 className="display-4 fw-bold mb-3 text-light" style={{ fontFamily: 'Cinzel Decorative, serif' }}>
             Shop
           </h1>
-          <p className="lead" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
+          <p className="lead text-muted" style={{ color: '#6c757d' }}>Discover our handcrafted collection</p>
         </div>
 
         {/* Tag Filter */}
@@ -288,28 +281,6 @@ export default function Shop() {
           </div>
         )}
       </Container>
-
-      {/* Toast Notifications */}
-      <ToastContainer 
-        position="top-center" 
-        className="p-3"
-        style={{ zIndex: 9999, marginTop: '80px' }}
-      >
-        <Toast 
-          show={showToast} 
-          onClose={() => setShowToast(false)} 
-          delay={3000} 
-          autohide
-          bg="success"
-        >
-          <Toast.Header>
-            <strong className="me-auto">✅ Added to Cart</strong>
-          </Toast.Header>
-          <Toast.Body className="text-white">
-            {toastMessage}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </div>
   );
 }

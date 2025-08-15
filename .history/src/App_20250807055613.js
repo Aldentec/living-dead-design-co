@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
-import ProductDetail from './pages/Shop/ProductDetail';
 import Custom from './pages/Custom';
 import About from './pages/About';
 import Gallery from './pages/Gallery';
@@ -12,8 +11,6 @@ import Signup from './pages/Auth/Signup';
 import Login from './pages/Auth/Login';
 import ConfirmSignup from './pages/Auth/ConfirmSignup';
 import ForgotPassword from './pages/Auth/ForgotPassword';
-
-import { CartProvider } from './context/CartContext';
 
 
 import AdminHome from './pages/Admin/AdminHome';
@@ -31,7 +28,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:productId" element={<ProductDetail />} />
             <Route path="/custom" element={<Custom />} />
             <Route path="/about" element={<About />} />
             <Route path="/gallery" element={<Gallery />} />

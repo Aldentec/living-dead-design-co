@@ -253,7 +253,7 @@ button:hover {
 }
 
 .text-muted {
-  color: #6c757d !important;
+  color: rgba(254, 255, 255, 0.75) !important;
 }
 
 .card-text {
