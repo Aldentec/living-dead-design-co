@@ -49,9 +49,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <div className="container-modern">
-        <div className="auth-wrapper">
+        <div className="auth-container">
           <div className="auth-form-container">
             {/* Header */}
             <div className="auth-header">
@@ -211,7 +211,7 @@ export default function Signup() {
             </div>
           </div>
 
-          {/* Side Panel */}
+          {/* Side Panel - Optional decorative element */}
           <div className="auth-side-panel">
             <div className="auth-side-content">
               <h3>Join the Dark Side</h3>
@@ -248,13 +248,6 @@ export default function Signup() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Background Decoration */}
-        <div className="auth-decoration">
-          <div className="auth-circle auth-circle-1"></div>
-          <div className="auth-circle auth-circle-2"></div>
-          <div className="auth-circle auth-circle-3"></div>
         </div>
       </div>
     </div>

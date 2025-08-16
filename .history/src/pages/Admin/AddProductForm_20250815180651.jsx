@@ -11,18 +11,28 @@ export default function AddProductForm() {
     quantity: '',
     weight: '',
     tags: '',
+    variants: `[
+  {
+    "options": {
+      "Color": "Black",
+      "Style": "T-Shirt",
+      "Size": "M"
+    },
+    "price": 20,
+    "quantity": 10
+  },
+  {
+    "options": {
+      "Color": "Black",
+      "Style": "Hoodie",
+      "Size": "L"
+    },
+    "price": 35,
+    "quantity": 5
+  }
+]`,
     image: null,
   });
-  
-  // Variant Builder State
-  const [variants, setVariants] = useState([]);
-  const [variantOptions, setVariantOptions] = useState({
-    Color: ['Black', 'White', 'Red', 'Gray'],
-    Size: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    Style: ['T-Shirt', 'Hoodie', 'Tank Top', 'Long Sleeve']
-  });
-  const [showVariantBuilder, setShowVariantBuilder] = useState(false);
-  
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -31,6 +41,7 @@ export default function AddProductForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+    // Clear messages when user starts typing
     if (successMsg) setSuccessMsg('');
     if (errorMsg) setErrorMsg('');
   };
@@ -69,119 +80,6 @@ export default function AddProductForm() {
     }
   };
 
-  // Variant Builder Functions
-  const addVariantOption = (category, newOption) => {
-    if (newOption && !variantOptions[category].includes(newOption)) {
-      setVariantOptions(prev => ({
-        ...prev,
-        [category]: [...prev[category], newOption]
-      }));
-    }
-  };
-
-  const removeVariantOption = (category, optionIndex) => {
-    setVariantOptions(prev => ({
-      ...prev,
-      [category]: prev[category].filter((_, index) => index !== optionIndex)
-    }));
-  };
-
-  const addVariantCategory = (categoryName) => {
-    if (categoryName && !variantOptions[categoryName]) {
-      setVariantOptions(prev => ({
-        ...prev,
-        [categoryName]: []
-      }));
-    }
-  };
-
-  const removeVariantCategory = (category) => {
-    setVariantOptions(prev => {
-      const newOptions = { ...prev };
-      delete newOptions[category];
-      return newOptions;
-    });
-    // Remove variants that use this category
-    setVariants(prev => prev.filter(variant => !variant.options[category]));
-  };
-
-  const generateVariants = () => {
-    const categories = Object.keys(variantOptions);
-    const options = Object.values(variantOptions);
-    
-    if (categories.length === 0) {
-      setVariants([]);
-      return;
-    }
-
-    // Generate all combinations
-    const combinations = [];
-    const generate = (current, depth) => {
-      if (depth === categories.length) {
-        combinations.push({ ...current });
-        return;
-      }
-      
-      const category = categories[depth];
-      const categoryOptions = options[depth];
-      
-      for (const option of categoryOptions) {
-        generate({ ...current, [category]: option }, depth + 1);
-      }
-    };
-
-    generate({}, 0);
-    
-    // Convert to variant format
-    const newVariants = combinations.map(combo => ({
-      options: combo,
-      price: parseFloat(form.price) || 0,
-      quantity: 10
-    }));
-    
-    setVariants(newVariants);
-  };
-
-  const updateVariant = (index, field, value) => {
-    setVariants(prev => prev.map((variant, i) => 
-      i === index 
-        ? { ...variant, [field]: field === 'price' ? parseFloat(value) || 0 : parseInt(value) || 0 }
-        : variant
-    ));
-  };
-
-  const removeVariant = (index) => {
-    setVariants(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const addCustomVariant = () => {
-    const newVariant = {
-      options: {},
-      price: parseFloat(form.price) || 0,
-      quantity: 10
-    };
-    
-    // Initialize with first option from each category
-    Object.keys(variantOptions).forEach(category => {
-      if (variantOptions[category].length > 0) {
-        newVariant.options[category] = variantOptions[category][0];
-      }
-    });
-    
-    setVariants(prev => [...prev, newVariant]);
-  };
-
-  const updateVariantOption = (variantIndex, category, value) => {
-    setVariants(prev => prev.map((variant, i) => 
-      i === variantIndex 
-        ? { 
-            ...variant, 
-            options: { ...variant.options, [category]: value }
-          }
-        : variant
-    ));
-  };
-
   const validateForm = () => {
     if (!form.title.trim()) {
       setErrorMsg('Product title is required');
@@ -202,6 +100,16 @@ export default function AddProductForm() {
     if (!form.image) {
       setErrorMsg('Product image is required');
       return false;
+    }
+    
+    // Validate JSON variants
+    if (form.variants.trim()) {
+      try {
+        JSON.parse(form.variants);
+      } catch (err) {
+        setErrorMsg('Variants must be valid JSON format');
+        return false;
+      }
     }
     
     return true;
@@ -227,7 +135,7 @@ export default function AddProductForm() {
         quantity: parseInt(form.quantity, 10),
         weight: form.weight ? parseFloat(form.weight) : 0,
         tags: form.tags ? form.tags.split(',').map(tag => tag.trim()).filter(tag => tag) : [],
-        variants: variants, // Use the visual variant builder data
+        variants: form.variants.trim() ? JSON.parse(form.variants) : [],
         imageBase64: base64Image,
       };
 
@@ -252,9 +160,19 @@ export default function AddProductForm() {
           quantity: '',
           weight: '',
           tags: '', 
+          variants: `[
+  {
+    "options": {
+      "Color": "Black",
+      "Style": "T-Shirt",
+      "Size": "M"
+    },
+    "price": 20,
+    "quantity": 10
+  }
+]`,
           image: null 
         });
-        setVariants([]);
         
         // Clear file input
         const fileInput = document.getElementById('product-image');
@@ -359,7 +277,7 @@ export default function AddProductForm() {
           
           <div className="form-grid">
             <div className="form-group">
-              <label htmlFor="price" className="form-label">Base Price ($) *</label>
+              <label htmlFor="price" className="form-label">Price ($) *</label>
               <input
                 id="price"
                 name="price"
@@ -376,7 +294,7 @@ export default function AddProductForm() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="quantity" className="form-label">Base Quantity *</label>
+              <label htmlFor="quantity" className="form-label">Quantity *</label>
               <input
                 id="quantity"
                 name="quantity"
@@ -409,211 +327,6 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        {/* Product Variants Section */}
-        <div className="form-section">
-          <h3 className="form-section-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
-            </svg>
-            Product Variants
-            <button
-              type="button"
-              className="btn btn-sm btn-secondary"
-              onClick={() => setShowVariantBuilder(!showVariantBuilder)}
-              style={{ marginLeft: 'auto' }}
-            >
-              {showVariantBuilder ? 'Hide Builder' : 'Show Builder'}
-            </button>
-          </h3>
-
-          {showVariantBuilder && (
-            <div className="variant-builder">
-              {/* Variant Categories */}
-              <div className="variant-categories">
-                <h4 className="variant-section-title">Variant Categories</h4>
-                
-                {Object.keys(variantOptions).map(category => (
-                  <div key={category} className="variant-category">
-                    <div className="category-header">
-                      <h5>{category}</h5>
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-danger"
-                        onClick={() => removeVariantCategory(category)}
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <line x1="18" y1="6" x2="6" y2="18"/>
-                          <line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                      </button>
-                    </div>
-                    
-                    <div className="category-options">
-                      {variantOptions[category].map((option, index) => (
-                        <div key={index} className="option-tag">
-                          <span>{option}</span>
-                          <button
-                            type="button"
-                            onClick={() => removeVariantOption(category, index)}
-                          >
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <line x1="18" y1="6" x2="6" y2="18"/>
-                              <line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                      
-                      <div className="add-option">
-                        <input
-                          type="text"
-                          placeholder="Add option..."
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              addVariantOption(category, e.target.value);
-                              e.target.value = '';
-                            }
-                          }}
-                          className="option-input"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="add-category">
-                  <input
-                    type="text"
-                    placeholder="Add new category (e.g., Material, Pattern)..."
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        addVariantCategory(e.target.value);
-                        e.target.value = '';
-                      }
-                    }}
-                    className="category-input"
-                  />
-                </div>
-              </div>
-
-              {/* Generate Variants Button */}
-              <div className="variant-actions">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={generateVariants}
-                  disabled={Object.keys(variantOptions).length === 0}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="23,4 23,10 17,10"/>
-                    <polyline points="1,20 1,14 7,14"/>
-                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64m13.85 8.72A9 9 0 0 1 5.64 18.36"/>
-                  </svg>
-                  Generate All Combinations
-                </button>
-                
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={addCustomVariant}
-                  disabled={Object.keys(variantOptions).length === 0}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="12" y1="5" x2="12" y2="19"/>
-                    <line x1="5" y1="12" x2="19" y2="12"/>
-                  </svg>
-                  Add Custom Variant
-                </button>
-              </div>
-
-              {/* Variants List */}
-              {variants.length > 0 && (
-                <div className="variants-list">
-                  <h4 className="variant-section-title">
-                    Generated Variants ({variants.length})
-                  </h4>
-                  
-                  <div className="variants-grid">
-                    {variants.map((variant, index) => (
-                      <div key={index} className="variant-item">
-                        <div className="variant-header">
-                          <div className="variant-options-display">
-                            {Object.entries(variant.options).map(([key, value]) => (
-                              <span key={key} className="variant-tag">
-                                {key}: {value}
-                              </span>
-                            ))}
-                          </div>
-                          <button
-                            type="button"
-                            className="btn btn-sm btn-danger"
-                            onClick={() => removeVariant(index)}
-                          >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <polyline points="3,6 5,6 21,6"/>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                            </svg>
-                          </button>
-                        </div>
-                        
-                        <div className="variant-controls">
-                          {Object.keys(variantOptions).map(category => (
-                            <div key={category} className="variant-control-group">
-                              <label>{category}:</label>
-                              <select
-                                value={variant.options[category] || ''}
-                                onChange={(e) => updateVariantOption(index, category, e.target.value)}
-                                className="variant-select"
-                              >
-                                {variantOptions[category].map(option => (
-                                  <option key={option} value={option}>{option}</option>
-                                ))}
-                              </select>
-                            </div>
-                          ))}
-                          
-                          <div className="variant-control-group">
-                            <label>Price ($):</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              value={variant.price}
-                              onChange={(e) => updateVariant(index, 'price', e.target.value)}
-                              className="variant-input"
-                            />
-                          </div>
-                          
-                          <div className="variant-control-group">
-                            <label>Quantity:</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={variant.quantity}
-                              onChange={(e) => updateVariant(index, 'quantity', e.target.value)}
-                              className="variant-input"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="form-help">
-            {variants.length > 0 
-              ? `${variants.length} product variants configured`
-              : 'No variants configured - product will use base price and quantity'
-            }
-          </div>
-        </div>
-
         {/* Product Details Section */}
         <div className="form-section">
           <h3 className="form-section-title">
@@ -639,6 +352,23 @@ export default function AddProductForm() {
               />
               <div className="form-help">
                 Separate tags with commas to help customers find your products
+              </div>
+            </div>
+
+            <div className="form-group form-group-full">
+              <label htmlFor="variants" className="form-label">Product Variants (JSON)</label>
+              <textarea
+                id="variants"
+                name="variants"
+                className="form-control form-textarea-code"
+                value={form.variants}
+                onChange={handleChange}
+                placeholder="Enter variants in JSON format"
+                rows="8"
+                disabled={loading}
+              />
+              <div className="form-help">
+                Define product options like colors, sizes, and styles in JSON format
               </div>
             </div>
           </div>

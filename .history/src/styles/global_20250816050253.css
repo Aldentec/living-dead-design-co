@@ -2435,7 +2435,7 @@ a:not(.btn):not(.nav-link):hover::after {
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: var(--color-bg-tertiary);
+  /* background: var(--color-accent-primary); */
   color: white;
 }
 

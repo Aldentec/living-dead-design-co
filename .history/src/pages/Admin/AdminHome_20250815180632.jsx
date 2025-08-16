@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AddProductForm from './AddProductForm';
 import ListProductTable from './ListProductTable';
-import './Admin.css';
 
 export default function AdminHome() {
   const [tab, setTab] = useState('list');
