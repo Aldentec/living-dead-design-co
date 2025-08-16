@@ -4,163 +4,10 @@ import heroImage from '../assets/skeletons-dancing-hero.png';
 
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     setIsVisible(true);
-    fetchFeaturedProducts();
   }, []);
-
-  const fetchFeaturedProducts = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('https://nbwke3grerscqtfchrbl6txcti0rgeip.lambda-url.us-west-2.on.aws/items');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch products');
-      }
-      
-      const data = await response.json();
-      
-      // Parse the Lambda response - the actual product data is in the body field
-      let productsArray;
-      if (data.body) {
-        // Lambda is returning full HTTP response with body as JSON string
-        productsArray = JSON.parse(data.body);
-      } else if (Array.isArray(data)) {
-        // Direct array response
-        productsArray = data;
-      } else {
-        productsArray = [];
-      }
-      
-      // Filter only active products and get first 3 for featured section
-      const activeProducts = Array.isArray(productsArray) 
-        ? productsArray.filter(product => product.isActive !== false)
-        : [];
-      
-      // Sort by newest and take first 3
-      const featured = activeProducts
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 3);
-      
-      setFeaturedProducts(featured);
-    } catch (err) {
-      console.error('Error fetching products:', err);
-      setError('Failed to load products');
-      // Fallback to sample data if API fails
-      setFeaturedProducts(getSampleProducts());
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fallback sample products
-  const getSampleProducts = () => [
-    {
-      id: 'sample1',
-      title: 'Gothic Skull T-Shirt',
-      description: 'Premium black cotton tee with intricate skull design',
-      price: 29.99,
-      salePrice: null,
-      imageUrl: '/api/placeholder/300/300',
-      tags: ['apparel', 'gothic', 'skull']
-    },
-    {
-      id: 'sample2',
-      title: 'Dark Rose Art Print',
-      description: 'Beautiful dark artwork perfect for any gothic space',
-      price: 19.99,
-      salePrice: 15.99,
-      imageUrl: '/api/placeholder/300/300',
-      tags: ['art', 'print', 'gothic']
-    },
-    {
-      id: 'sample3',
-      title: 'Raven Hoodie',
-      description: 'Comfortable hoodie featuring mystical raven artwork',
-      price: 49.99,
-      salePrice: null,
-      imageUrl: '/api/placeholder/300/300',
-      tags: ['apparel', 'hoodie', 'raven']
-    }
-  ];
-
-  const ProductCard = ({ product }) => (
-    <div className="product-card">
-      <div className="product-image-container" style={{ position: 'relative', overflow: 'hidden' }}>
-        <img 
-          src={product.imageUrl} 
-          alt={product.title}
-          className="product-image"
-          onError={(e) => {
-            // Fallback to placeholder if image fails to load
-            e.target.src = '/api/placeholder/300/300';
-          }}
-        />
-        {product.salePrice && product.salePrice < product.price && (
-          <span 
-            className="product-badge"
-            style={{
-              position: 'absolute',
-              top: 'var(--space-3)',
-              right: 'var(--space-3)',
-              background: 'var(--color-accent-gradient)',
-              color: 'white',
-              padding: 'var(--space-1) var(--space-3)',
-              borderRadius: 'var(--radius-full)',
-              fontSize: 'var(--text-xs)',
-              fontWeight: 'var(--font-weight-bold)',
-            }}
-          >
-            Sale
-          </span>
-        )}
-      </div>
-      <div className="product-info">
-        <h3 className="product-title">{product.title}</h3>
-        <p className="product-description">
-          {product.description && product.description.length > 80 
-            ? `${product.description.substring(0, 80)}...` 
-            : product.description}
-        </p>
-        <div className="product-pricing" style={{ marginBottom: 'var(--space-4)' }}>
-          {product.salePrice && product.salePrice < product.price ? (
-            <>
-              <span className="product-price" style={{ 
-                textDecoration: 'line-through', 
-                color: 'var(--color-text-muted)',
-                marginRight: 'var(--space-2)',
-              }}>
-                ${product.price}
-              </span>
-              <span className="product-price">${product.salePrice}</span>
-            </>
-          ) : (
-            <span className="product-price">${product.price}</span>
-          )}
-        </div>
-        
-        {product.tags && product.tags.length > 0 && (
-          <div className="product-tags">
-            {product.tags.slice(0, 2).map(tag => (
-              <span key={tag} className="product-tag">{tag}</span>
-            ))}
-          </div>
-        )}
-        
-        <Link 
-          to={`/product/${product.id}`} 
-          className="btn btn-primary w-full"
-          style={{ marginTop: 'var(--space-4)' }}
-        >
-          View Details
-        </Link>
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -333,65 +180,36 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Loading State */}
-          {loading ? (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 'var(--space-6)',
-              marginBottom: 'var(--space-12)',
-            }}>
-              {[1, 2, 3].map((item) => (
-                <div key={item} className="product-card">
-                  <div className="skeleton skeleton-image"></div>
-                  <div className="product-info">
-                    <div className="skeleton skeleton-title"></div>
-                    <div className="skeleton skeleton-text" style={{ width: '40%' }}></div>
-                    <div className="skeleton skeleton-text" style={{ width: '80%' }}></div>
-                    <div style={{ marginTop: 'var(--space-4)' }}>
-                      <div className="skeleton" style={{ height: '44px', borderRadius: 'var(--radius-lg)' }}></div>
-                    </div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 'var(--space-6)',
+            marginBottom: 'var(--space-12)',
+          }}>
+            {/* Sample Product Cards */}
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="product-card">
+                <div className="skeleton skeleton-image"></div>
+                <div className="product-info">
+                  <div className="skeleton skeleton-title"></div>
+                  <div className="skeleton skeleton-text" style={{ width: '40%' }}></div>
+                  <div className="skeleton skeleton-text" style={{ width: '80%' }}></div>
+                  <div style={{ marginTop: 'var(--space-4)' }}>
+                    <div className="skeleton" style={{ height: '44px', borderRadius: 'var(--radius-lg)' }}></div>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : error ? (
-            /* Error State */
-            <div className="text-center" style={{ padding: 'var(--space-12) 0' }}>
-              <p style={{ color: 'var(--color-text-tertiary)', marginBottom: 'var(--space-4)' }}>
-                {error}
-              </p>
-              <button 
-                onClick={fetchFeaturedProducts}
-                className="btn btn-secondary"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : (
-            /* Products Grid */
-            <>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: 'var(--space-6)',
-                marginBottom: 'var(--space-12)',
-              }}>
-                {featuredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
               </div>
+            ))}
+          </div>
 
-              <div className="text-center">
-                <Link to="/shop" className="btn btn-primary btn-lg">
-                  <span>View All Products</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
-              </div>
-            </>
-          )}
+          <div className="text-center">
+            <Link to="/shop" className="btn btn-primary btn-lg">
+              <span>View All Products</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
 

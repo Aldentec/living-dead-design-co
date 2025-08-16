@@ -35,7 +35,7 @@ export default function AppNavbar() {
           <Link to="/shop" className="modern-nav-link">Shop</Link>
           <Link to="/custom" className="modern-nav-link">Custom</Link>
           <Link to="/about" className="modern-nav-link">About</Link>
-          {/* <Link to="/gallery" className="modern-nav-link">Gallery</Link> */}
+          <Link to="/gallery" className="modern-nav-link">Gallery</Link>
           
           {user ? (
             <Link to="/account" className="modern-nav-link">Account</Link>
